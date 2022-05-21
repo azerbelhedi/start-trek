@@ -10,7 +10,7 @@ class Object {
 
   Object(CartesianCoordinates position, CartesianCoordinates velocity,
          CartesianCoordinates acceleration, double m, Force f);
-  virtual void preCompute();
+  virtual void preCompute(int frameNumber, double time);
   void compute(double framesRate);
   virtual void postCompute();
   virtual Force computeForce(double pressure, double ro);

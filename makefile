@@ -1,3 +1,6 @@
+all:
+	make run && make plot
+	
 compile: 
 	cd apps/ball && make compile
 

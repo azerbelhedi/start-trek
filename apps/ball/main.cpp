@@ -20,36 +20,67 @@ class Ball : public Object {
       : Object(position, velocity, acceleration, m, f),
         dragCof(dragCof),
         area(area) {
-    ofstream plotFile;
-    plotFile.open("position.dat");
-    plotFile << "# position.dat\n"
-             << "# X" << setw(12) << "Y\n";
+    ofstream positionFile, velocityFile, accelerationFile, forceFile;
+
+    positionFile.open("position.dat");
+    velocityFile.open("velocity.dat");
+    accelerationFile.open("acceleration.dat");
+    forceFile.open("force.dat");
+
+    positionFile << "# position.dat\n"
+                 << "# T" << setw(12) << "X" << setw(12) << "Y\n";
+
+    velocityFile << "# velocity.dat\n"
+                 << "# T" << setw(12) << "X" << setw(12) << "Y\n";
+
+    accelerationFile << "# acceleration.dat\n"
+                     << "# T" << setw(12) << "X" << setw(12) << "Y\n";
+
+    forceFile << "# force.dat\n"
+              << "#T" << setw(12) << "X" << setw(12) << "Y\n";
   }
 
-  void preCompute() {
-    cout << "position: x: " << position.x << " y: " << position.y
-         << " z: " << position.z << "\n";
+  void preCompute(int frameNumber, double time) {
+    ofstream positionFile, velocityFile, accelerationFile, forceFile;
 
-    cout << "velocity: x: " << velocity.x << " y: " << velocity.y
-         << " z: " << velocity.z << "\n";
+    positionFile.open("position.dat", ios_base::app);
+    velocityFile.open("velocity.dat", ios_base::app);
+    accelerationFile.open("acceleration.dat", ios_base::app);
+    forceFile.open("force.dat", ios_base::app);
 
-    cout << "force: x: " << f.weightedDirection.x
-         << " y: " << f.weightedDirection.y << " z: " << f.weightedDirection.z
-         << "\n";
+    positionFile << " " << left << setw(12) << time << setw(12) << position.x
+                 << setw(12) << position.y << "\n";
 
-    ofstream plotFile;
-    plotFile.open("position.dat", ios_base::app);
-    fixed;
-    setprecision(1);
-    plotFile << " " << left << setw(12) << position.x << setw(12) << position.y
-             << "\n";
+    velocityFile << " " << left << setw(12) << time << setw(12) << velocity.x
+                 << setw(12) << velocity.y << "\n";
+
+    accelerationFile << " " << left << setw(12) << time << setw(12)
+                     << acceleration.x << setw(12) << acceleration.y << "\n";
+
+    forceFile << " " << left << setw(12) << time << setw(12)
+              << f.weightedDirection.x << setw(12) << f.weightedDirection.y
+              << "\n";
   }
 
   Force computeForce(double p, double ro) {
     f.weightedDirection.x -= (ro * velocity.x * dragCof * area) / 2;
-    f.weightedDirection.y -= (ro * velocity.y * dragCof * area) / 2;
-    +m * 9.81;
+    f.weightedDirection.y -=
+        ((ro * velocity.y * dragCof * area) / 2 + m * 9.81);
     f.weightedDirection.z -= (ro * velocity.z * dragCof * area) / 2;
+
+    if (position.y <= 0) {
+      f.weightedDirection.x = 0;
+      f.weightedDirection.y = 0;
+      f.weightedDirection.z = 0;
+
+      acceleration.x = 0;
+      acceleration.y = 0;
+      acceleration.z = 0;
+
+      velocity.x = 0;
+      velocity.y = 0;
+      velocity.z = 0;
+    }
 
     return f;
   }
@@ -60,13 +91,13 @@ int main() {
   earth.pressure = 10000;
   earth.ro = 1.225;
 
-  CartesianCoordinates position(0, 0, 0);
+  CartesianCoordinates position(0, 1000, 0);
   CartesianCoordinates velocity(0, 0, 0);
   CartesianCoordinates acceleration(0, 0, 0);
 
-  CartesianCoordinates forceWeightedDirection(15, 5, 0);
-  Force initialForce(forceWeightedDirection, 15.81);
-  double m = 0.5;
+  CartesianCoordinates forceWeightedDirection(0, -50, 0);
+  Force initialForce(forceWeightedDirection, 0);
+  double m = 0.2;
   double dragCof = 0.5;
   double area = 0.05;
 
@@ -75,7 +106,7 @@ int main() {
 
   earth.addObject(ball);
 
-  earth.run(1, 200);
+  earth.run(50, 15);
 
   return 0;
 }

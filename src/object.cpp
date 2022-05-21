@@ -15,7 +15,7 @@ Object::Object(CartesianCoordinates position, CartesianCoordinates velocity,
       m(m),
       f(f) {}
 
-void Object::preCompute() {}
+void Object::preCompute(int frameNumber, double time) {}
 
 void Object::compute(double framesRate) {
   acceleration.x = f.weightedDirection.x / m;
