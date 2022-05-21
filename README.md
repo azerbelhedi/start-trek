@@ -1,25 +1,23 @@
-# Start Trek Simulator
-
-## Your trek into the stars
+# Start Trek Simulator: Your trek into the stars
 
 ## All purpose bodies kinematics simulation
 
-#### Compile
+### Compile
 
 `make compile`
 
-#### Run
+### Run
 
 `make run`
 
-#### Plot results
+### Plot results
 
 `make plot`
 
-#### Clean to start again
+### Clean to start again
 
 `make clean`
 
-#### Compile them run then plot
+### Compile them run then plot
 
 `make all` or just `make`

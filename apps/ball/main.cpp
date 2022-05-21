@@ -14,10 +14,10 @@ class Ball : public Object {
   double dragCof;
   double area;
 
-  Ball(CartesianCoordinates position, CartesianCoordinates velocity,
-       CartesianCoordinates acceleration, double m, Force f, double dragCof,
-       double area)
-      : Object(position, velocity, acceleration, m, f),
+  Ball(string name, CartesianCoordinates position,
+       CartesianCoordinates velocity, CartesianCoordinates acceleration,
+       double m, Force f, double dragCof, double area)
+      : Object(name, position, velocity, acceleration, m, f),
         dragCof(dragCof),
         area(area) {
     ofstream positionFile, velocityFile, accelerationFile, forceFile;
@@ -91,22 +91,24 @@ int main() {
   earth.pressure = 10000;
   earth.ro = 1.225;
 
-  CartesianCoordinates position(0, 1000, 0);
+  CartesianCoordinates position(0, 0, 0);
   CartesianCoordinates velocity(0, 0, 0);
   CartesianCoordinates acceleration(0, 0, 0);
 
-  CartesianCoordinates forceWeightedDirection(0, -50, 0);
+  CartesianCoordinates forceWeightedDirection(50, 150, 0);
   Force initialForce(forceWeightedDirection, 0);
   double m = 0.2;
   double dragCof = 0.5;
   double area = 0.05;
 
-  Ball* ball = new Ball(position, velocity, acceleration, m, initialForce,
-                        dragCof, area);
+  Ball* ball = new Ball("steal-ball", position, velocity, acceleration, m,
+                        initialForce, dragCof, area);
 
   earth.addObject(ball);
 
   earth.run(50, 15);
+
+  ball->saveVariablesToFile();
 
   return 0;
 }

@@ -7,9 +7,12 @@
 
 using namespace std;
 
-Object::Object(CartesianCoordinates position, CartesianCoordinates velocity,
-               CartesianCoordinates acceleration, double m, Force f)
-    : position(position),
+Object::Object(string name, CartesianCoordinates position,
+               CartesianCoordinates velocity, CartesianCoordinates acceleration,
+               double m, Force f)
+    : Observable(name, {"t", "x", "y", "z", "v_x", "v_y", "v_z", "a_x", "a_y",
+                        "a_z", "f_x", "f_y", "f_z"}),
+      position(position),
       velocity(velocity),
       acceleration(acceleration),
       m(m),
