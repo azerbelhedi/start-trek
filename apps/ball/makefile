@@ -6,6 +6,9 @@ run: compile
 	echo "***************  RUNNING  ***************"
 	./main.exe
 
+plot:
+	gnuplot output.p
+
 clean:
-	rm main.exe || clear
+	rm main.exe position.dat position.png || clear
 	clear

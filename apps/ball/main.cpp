@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 
 #include "../../headers/environment.h"
@@ -17,7 +19,12 @@ class Ball : public Object {
        double area)
       : Object(position, velocity, acceleration, m, f),
         dragCof(dragCof),
-        area(area) {}
+        area(area) {
+    ofstream plotFile;
+    plotFile.open("position.dat");
+    plotFile << "# position.dat\n"
+             << "# X" << setw(12) << "Y\n";
+  }
 
   void preCompute() {
     cout << "position: x: " << position.x << " y: " << position.y
@@ -29,6 +36,13 @@ class Ball : public Object {
     cout << "force: x: " << f.weightedDirection.x
          << " y: " << f.weightedDirection.y << " z: " << f.weightedDirection.z
          << "\n";
+
+    ofstream plotFile;
+    plotFile.open("position.dat", ios_base::app);
+    fixed;
+    setprecision(1);
+    plotFile << " " << left << setw(12) << position.x << setw(12) << position.y
+             << "\n";
   }
 
   Force computeForce(double p, double ro) {
